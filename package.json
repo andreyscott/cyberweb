@@ -1,0 +1,41 @@
+{
+  "name": "cybersec",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CyberSec: a cybersecurity acronym dictionary with quizzes and offline flashcards.",
+  "engines": { "node": ">=20.9.0" },
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run validate && next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "validate": "tsx scripts/validate-content.ts",
+    "test": "tsx scripts/test-logic.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "loadtest": "k6 run scripts/loadtest.js"
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.0.0",
+    "dexie": "^4.0.0",
+    "drizzle-orm": "^0.44.0",
+    "minisearch": "^7.1.0",
+    "next": "^16.0.0",
+    "pg": "^8.13.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "server-only": "^0.0.1",
+    "ts-fsrs": "^5.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
