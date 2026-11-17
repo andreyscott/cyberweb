@@ -1,3 +1,4 @@
+import type { Options } from "minisearch";
 import type { Acronym } from "@/data/types";
 
 /** One row of the search index: only short fields, so the index stays small. */
@@ -23,7 +24,7 @@ export const toSearchDoc = (a: Acronym): SearchDoc => ({
 });
 
 /** Shared MiniSearch config, used both when building and when loading the index. */
-export const MINISEARCH_OPTIONS = {
+export const MINISEARCH_OPTIONS: Options<SearchDoc> = {
   idField: "id",
   fields: ["acronym", "compact", "expansion", "aliases"],
   storeFields: ["acronym", "expansion", "domains"],
@@ -32,7 +33,7 @@ export const MINISEARCH_OPTIONS = {
     prefix: true,
     fuzzy: (term: string) => (term.length > 4 ? 0.2 : false),
   },
-} as const;
+};
 
 /**
  * Exact acronym matches go first ("cia" shows both CIA entries before "CIS"),
