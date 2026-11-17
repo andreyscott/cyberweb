@@ -1,7 +1,7 @@
 "use client";
 
 import { createEmptyCard, fsrs, Rating, type Card } from "ts-fsrs";
-import { getDb, newId } from "./local-db";
+import { getDb, newId, type OutboxEvent } from "./local-db";
 
 /** 90% target retention is FSRS's default and a good starting point. */
 const scheduler = fsrs({ request_retention: 0.9, maximum_interval: 365, enable_fuzz: true });
@@ -29,9 +29,11 @@ export function previewIntervals(card: Card, now = new Date()) {
 export async function review(slug: string, card: Card, rating: GradeRating, now = new Date()) {
   const next = scheduler.next(card, now, rating).card;
   const d = getDb();
+  // Typed separately: Dexie's insert type is an Omit over the OutboxEvent union, which drops `slug`/`rating`.
+  const event: OutboxEvent = { id: newId(), kind: "review", slug, rating, at: now.getTime() };
   await d.transaction("rw", d.cards, d.outbox, async () => {
     await d.cards.put({ slug, card: next, due: new Date(next.due).getTime() });
-    await d.outbox.put({ id: newId(), kind: "review", slug, rating, at: now.getTime() });
+    await d.outbox.put(event);
   });
   return next;
 }
